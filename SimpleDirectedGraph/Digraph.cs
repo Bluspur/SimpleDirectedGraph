@@ -10,7 +10,7 @@ namespace Bluspur.Graphs
     /// <typeparam name="TEdge">Generic type that represents an edge in the graph. Must inherit from IEdge.</typeparam>
     public class Digraph<TNode, TEdge> where TNode : notnull where TEdge : IEdge<TNode>
     {
-        private Dictionary<TNode, List<IEdge<TNode>>> _adjacencyLists = new();
+        private Dictionary<TNode, List<TEdge>> _adjacencyLists = new();
 
         /// <summary>
         /// Returns a count of all the nodes present in the graph.
@@ -27,7 +27,7 @@ namespace Bluspur.Graphs
             {
                 int count = 0;
 
-                foreach (KeyValuePair<TNode, List<IEdge<TNode>>> kvp in _adjacencyLists)
+                foreach (KeyValuePair<TNode, List<TEdge>> kvp in _adjacencyLists)
                 {
                     count += kvp.Value.Count;
                 }
@@ -42,14 +42,14 @@ namespace Bluspur.Graphs
         public virtual void AddNode(TNode node)
         {
             if (node is null) throw new ArgumentNullException(nameof(node));
-            _adjacencyLists.TryAdd(node, new List<IEdge<TNode>>());
+            _adjacencyLists.TryAdd(node, new List<TEdge>());
         }
 
         /// <summary>
         /// Adds an Edge to the graph that connects two Nodes.
         /// Any Nodes not already part of the graph are added automatically.
         /// </summary>
-        public virtual void AddEdge(IEdge<TNode> edge)
+        public virtual void AddEdge(TEdge edge)
         {
             // TODO: Implement Exception handling for when either the Origin or Destination of an Edge is false.
             // TODO: Implement Exception handling for when the Origin and Destination of an Edge are the same.
@@ -62,7 +62,7 @@ namespace Bluspur.Graphs
             // If is doesn't exist, then make a new list containing the new edge and assign it to the relevant key.
             else
             {
-                outgoingEdges = new List<IEdge<TNode>> { edge };
+                outgoingEdges = new List<TEdge> { edge };
                 _adjacencyLists[edge.Origin] = outgoingEdges;
             }
             // If the destination Node is not already present in the graph, then add it.
@@ -82,7 +82,7 @@ namespace Bluspur.Graphs
             if (!nodePresent) return;
             // We need to check all the outgoing edges of other nodes and then remove edges leading to this node.
             // Probably quite slow, do some performance tests.
-            foreach (KeyValuePair<TNode, List<IEdge<TNode>>> kvp in _adjacencyLists)
+            foreach (KeyValuePair<TNode, List<TEdge>> kvp in _adjacencyLists)
             {
                 kvp.Value.RemoveAll(x => x.Destination.Equals(node));
             }
@@ -97,7 +97,7 @@ namespace Bluspur.Graphs
             _adjacencyLists.TryGetValue(edge.Origin, out var outgoingEdges);
             if (outgoingEdges is not null)
             {
-                foreach (IEdge<TNode> existingEdge in outgoingEdges)
+                foreach (TEdge existingEdge in outgoingEdges)
                 {
                     if (existingEdge.Equals(edge))
                     {
@@ -142,13 +142,13 @@ namespace Bluspur.Graphs
         /// <summary>
         /// Returns an Enumerable collection of all the edges leading out from the input node.
         /// </summary>
-        public virtual IEnumerable<IEdge<TNode>> GetOutgoingEdges(TNode node)
+        public virtual IEnumerable<TEdge> GetOutgoingEdges(TNode node)
         {
             if (node is null) throw new ArgumentNullException(nameof(node));
             _adjacencyLists.TryGetValue(node, out var outgoingEdges);
             if (outgoingEdges is null)
                 yield break;
-            foreach (IEdge<TNode> edge in outgoingEdges)
+            foreach (TEdge edge in outgoingEdges)
                 yield return edge;
         }
     }
