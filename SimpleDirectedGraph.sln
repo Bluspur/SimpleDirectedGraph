@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleDirectedGraph", "SimpleDirectedGraph\SimpleDirectedGraph.csproj", "{1BE564FE-4D60-4FD2-B22F-2CFA353A87A1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleDirectedGraphTests", "SimpleDirectedGraphTests\SimpleDirectedGraphTests.csproj", "{FD5886D7-8A14-41FE-A967-6CBC2B6391F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{1BE564FE-4D60-4FD2-B22F-2CFA353A87A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1BE564FE-4D60-4FD2-B22F-2CFA353A87A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1BE564FE-4D60-4FD2-B22F-2CFA353A87A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD5886D7-8A14-41FE-A967-6CBC2B6391F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD5886D7-8A14-41FE-A967-6CBC2B6391F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD5886D7-8A14-41FE-A967-6CBC2B6391F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD5886D7-8A14-41FE-A967-6CBC2B6391F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
