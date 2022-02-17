@@ -57,8 +57,6 @@ namespace Bluspur.Graphs
                 AddNode(edge.Destination);
         }
 
-        
-
         /// <summary>
         /// Removes a node object from the graph and any related edges.
         /// </summary>

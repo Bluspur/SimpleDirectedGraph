@@ -116,6 +116,5 @@ namespace Bluspur.Graphs.Tests
                 this.destination = destination;
             }
         }
-
     }
 }
