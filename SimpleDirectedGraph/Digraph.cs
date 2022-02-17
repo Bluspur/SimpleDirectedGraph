@@ -40,9 +40,7 @@ namespace Bluspur.Graphs
         /// </summary>
         public virtual void AddEdge(TEdge edge)
         {
-            // TODO: Implement Exception handling for when either the Origin or Destination of an Edge is false.
-            // TODO: Implement Exception handling for when the Origin and Destination of an Edge are the same.
-            if (edge is null) throw new ArgumentNullException(nameof(edge));
+            CheckEdgeForNullValues(edge);
             // Check if an adjacency list already exists for the Origin.
             _adjacencyLists.TryGetValue(edge.Origin, out var outgoingEdges);
             // If the list exists, then just append the new edge.
@@ -58,6 +56,8 @@ namespace Bluspur.Graphs
             if (!_adjacencyLists.ContainsKey(edge.Destination))
                 AddNode(edge.Destination);
         }
+
+        
 
         /// <summary>
         /// Removes a node object from the graph and any related edges.
@@ -80,9 +80,9 @@ namespace Bluspur.Graphs
         /// <summary>
         /// Removes an Edge from the graph based on its Origin and Destination properties.
         /// </summary>
-        public virtual void TryRemoveEdge(IEdge<TNode> edge)
+        public virtual void TryRemoveEdge(TEdge edge)
         {
-            if (edge is null) throw new ArgumentNullException(nameof(edge));
+            CheckEdgeForNullValues(edge);
             _adjacencyLists.TryGetValue(edge.Origin, out var outgoingEdges);
             if (outgoingEdges is not null)
             {
@@ -131,6 +131,16 @@ namespace Bluspur.Graphs
                 yield break;
             foreach (TEdge edge in outgoingEdges)
                 yield return edge;
+        }
+
+        /// <summary>
+        /// Takes an edge and checks that it and it's essential properties are NOT null. If they are throw an exception.
+        /// </summary>
+        protected virtual void CheckEdgeForNullValues(TEdge edge)
+        {
+            if (edge is null) throw new ArgumentNullException(nameof(edge));
+            if (edge.Origin is null) throw new ArgumentException($"{nameof(edge.Origin)} must not be Null");
+            if (edge.Destination is null) throw new ArgumentException($"{nameof(edge.Destination)} must not be Null");
         }
     }
 }
