@@ -3,8 +3,11 @@ using System.Linq;
 
 namespace Bluspur.Graphs.Tests
 {
+    /// <summary>
+    /// Tests Digraph methods when using a value type (int) as the node type
+    /// </summary>
     [TestClass]
-    public class DigraphTests
+    public class DigraphValueNodeTests
     {
         [TestMethod()]
         public void AddEdgeTest()
@@ -113,6 +116,5 @@ namespace Bluspur.Graphs.Tests
                 this.destination = destination;
             }
         }
-
     }
 }

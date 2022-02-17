@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Bluspur.Graphs
 {
@@ -8,7 +9,7 @@ namespace Bluspur.Graphs
     /// </summary>
     /// <typeparam name="TNode">Generic type to be used as the graph nodes.</typeparam>
     /// <typeparam name="TEdge">Generic type that represents an edge in the graph. Must inherit from IEdge.</typeparam>
-    public class Digraph<TNode, TEdge> where TNode : notnull where TEdge : IEdge<TNode>
+    public class Digraph<TNode, TEdge> where TEdge : IEdge<TNode>
     {
         private Dictionary<TNode, List<TEdge>> _adjacencyLists = new();
 
@@ -22,19 +23,7 @@ namespace Bluspur.Graphs
         /// Returns a count of all edges from all nodes in the graph.
         /// </summary>
         public int EdgeCount
-        {
-            get
-            {
-                int count = 0;
-
-                foreach (KeyValuePair<TNode, List<TEdge>> kvp in _adjacencyLists)
-                {
-                    count += kvp.Value.Count;
-                }
-
-                return count;
-            }
-        }
+            => _adjacencyLists.Values.Sum(x => x.Count);
 
         /// <summary>
         /// Adds a Node with no outgoing edges.
@@ -51,9 +40,7 @@ namespace Bluspur.Graphs
         /// </summary>
         public virtual void AddEdge(TEdge edge)
         {
-            // TODO: Implement Exception handling for when either the Origin or Destination of an Edge is false.
-            // TODO: Implement Exception handling for when the Origin and Destination of an Edge are the same.
-            if (edge is null) throw new ArgumentNullException(nameof(edge));
+            CheckEdgeForNullValues(edge);
             // Check if an adjacency list already exists for the Origin.
             _adjacencyLists.TryGetValue(edge.Origin, out var outgoingEdges);
             // If the list exists, then just append the new edge.
@@ -91,9 +78,9 @@ namespace Bluspur.Graphs
         /// <summary>
         /// Removes an Edge from the graph based on its Origin and Destination properties.
         /// </summary>
-        public virtual void TryRemoveEdge(IEdge<TNode> edge)
+        public virtual void TryRemoveEdge(TEdge edge)
         {
-            if (edge is null) throw new ArgumentNullException(nameof(edge));
+            CheckEdgeForNullValues(edge);
             _adjacencyLists.TryGetValue(edge.Origin, out var outgoingEdges);
             if (outgoingEdges is not null)
             {
@@ -122,15 +109,7 @@ namespace Bluspur.Graphs
             if (origin is null) throw new ArgumentNullException(nameof(origin));
             if (destination is null) throw new ArgumentNullException(nameof(destination));
             _adjacencyLists.TryGetValue(origin, out var outgoingEdges);
-            if (outgoingEdges is not null)
-            {
-                foreach (var edge in outgoingEdges)
-                {
-                    if (edge.Destination.Equals(destination))
-                        return true;
-                }
-            }
-            return false;
+            return outgoingEdges?.Any(edge => edge.Destination.Equals(destination)) ?? false;
         }
 
         /// <summary>
@@ -150,6 +129,16 @@ namespace Bluspur.Graphs
                 yield break;
             foreach (TEdge edge in outgoingEdges)
                 yield return edge;
+        }
+
+        /// <summary>
+        /// Takes an edge and checks that it and it's essential properties are NOT null. If they are throw an exception.
+        /// </summary>
+        protected virtual void CheckEdgeForNullValues(TEdge edge)
+        {
+            if (edge is null) throw new ArgumentNullException(nameof(edge));
+            if (edge.Origin is null) throw new ArgumentException($"{nameof(edge.Origin)} must not be Null");
+            if (edge.Destination is null) throw new ArgumentException($"{nameof(edge.Destination)} must not be Null");
         }
     }
 }

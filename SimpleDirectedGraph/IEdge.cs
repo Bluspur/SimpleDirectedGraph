@@ -7,7 +7,7 @@
     public interface IEdge<TNode>
     {
         /// <summary>
-        /// The Node from which an starts.
+        /// The Node from which an edge starts.
         /// </summary>
         public TNode Origin { get; }
         /// <summary>
